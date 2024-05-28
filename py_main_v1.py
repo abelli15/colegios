@@ -40,7 +40,8 @@ for item in data:
     urls = google_results(driver)
     url = urls[0]
     navigate_to_page(driver, url)
-    html_text_list = split_text("\n", find_element(driver, "//body").text)
+    html_body = find_element(driver, "//body")
+    html_text_list = split_text("\n", html_body.text)
     for html_text_element in html_text_list:
         # 3.2) Buscar la dirección del colegio
         adress_match = find_match(r"\b28[0-9]{3}\b", html_text_element)
