@@ -1,21 +1,9 @@
 import re
+import time
 from bs4 import BeautifulSoup
+from py_ollama import generate_response
 
-def find_match(pattern, string):
-    match = re.search(pattern, string)
-    return match
-def find_all_matches(pattern, string):
-    matches = re.findall(pattern, string)
-    return matches
-def replace_text(pattern, replacement, string):
-    result = re.sub(pattern, replacement, string)
-    return result
-def split_text(pattern, string):
-    result = re.split(pattern, string)
-    return result
-def match_pattern(pattern, string):
-    match = re.fullmatch(pattern, string)
-    return match
+# Extraer la información relevante sobre horarios mediante Regex
 def extract_schedules_info(html_content):
     soup = BeautifulSoup(html_content, "html.parser")
     soup = remove_script_tags(soup)
@@ -36,7 +24,25 @@ def extract_schedules_info(html_content):
         schedule_sections.append(str(parent))
 
     return " ".join(schedule_sections)
+# Eliminar las etiquetas script
 def remove_script_tags(soup):
     for script in soup(["script", "style"]):
         script.decompose()
     return soup
+
+# Lee el contenido del archivo
+test_file = "test_html.html"
+with open(test_file, "r", encoding="utf-8") as file:
+    html_content = file.read()
+
+# Analiza el contenido HTML
+schedule_info = extract_schedules_info(html_content)
+
+# Pide a la IA que extraiga la información
+schedule_prompt = "Si encuentras el horario lectivo del colegio, por favor, extrae únicamente el horario indicado. Si no encuentras nada, por favor, responde que no lo has encontrado. Debes buscar el horario lectivo en el siguiente HTML: " + schedule_info
+start_time = time.time()
+schedule_response = generate_response(model="phi3:3.8b",prompt=schedule_prompt,stream=False)
+schedule_time = str(time.time() - start_time)
+response = schedule_response["response"]
+print(response)
+pass
