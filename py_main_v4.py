@@ -25,6 +25,14 @@ def create_output_file(output_filename): ## Crear el archivo de salida donde se 
         results = []
     write_csv(output_filename, output_headers, results)
     return results
+"""def find_address(html_content): ## Obtén el horario lectivo del HTML de la página
+    address_info = extract_addresss_info(html_content)
+    address_prompt = "Si encuentras el horario lectivo del colegio, por favor, extrae únicamente el horario indicado. Si no encuentras nada, por favor, responde que no lo has encontrado. Debes buscar el horario lectivo en el siguiente HTML: " + address_info
+    start_time = time.time()
+    address_response = generate_response(model="phi3:3.8b",prompt=address_prompt,stream=False)
+    address_time = str(time.time() - start_time)
+    response = address_response["response"]
+    return(response, address_time)"""
 def find_schedule(html_content): ## Obtén el horario lectivo del HTML de la página
     schedule_info = extract_schedules_info(html_content)
     schedule_prompt = "Si encuentras el horario lectivo del colegio, por favor, extrae únicamente el horario indicado. Si no encuentras nada, por favor, responde que no lo has encontrado. Debes buscar el horario lectivo en el siguiente HTML: " + schedule_info
