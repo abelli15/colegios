@@ -18,7 +18,7 @@ results = create_result_file(results_filename)
 driver = open_browser(url_query)
 
 # 4) Buscar cada colegio
-index, total_len = 0, len(data)
+index, total_len = 1, len(data)
 for item in data:
     done, code = item["DONE"], item["ID"]
     print(str(index) + " de " + str(total_len) + "(" + code + ")")
@@ -37,7 +37,7 @@ for item in data:
         item["DONE"] = "1"
         update_data_file(data_filename, data)
     index += 1
-    if index % 20 == 0:
+    if index % 40 == 0:
         close_browser(driver)
         driver = open_browser(url_query)
 

@@ -51,6 +51,7 @@ def get_data(driver, code): # Hacer la búsqueda por código de centro y obtener
     send_keys_element(driver, "//input[@id='basica.strCodNomMuni']", code)
     click_element(driver, "//a[@id='btnConsultarCritBusq01']")
     click_element(driver, f"//a[@onclick=\"enviarFormulario('{code}');\"]")
+    name, tipo, titularidad, titular, mncp, dircc, tlf, fax, web, email, jornada = "", "", "", "", "", "", "", "", "", "", ""
     try: name, tipo, titularidad, titular, mncp, dircc, tlf, fax, web, email = get_capaDatIdentContent_values(find_element(driver, "//div[@id='capaDatIdentContent']").get_attribute("outerHTML"))
     except: pass
     try: jornada = get_capaOtrosCritContent_values(find_element(driver, "//div[@id='capaOtrosCritContent']").get_attribute("outerHTML"), wait_M)
@@ -68,7 +69,7 @@ def get_capaDatIdentContent_values(capaDatIdentContent): # Obtener los datos nam
         titular = soup.find(lambda tag: tag.name == "td" and "Titular:" in tag.text).find_all("strong")[1].get_text(strip=True)
         mncp = soup.find(lambda tag: tag.name == "td" and "Área territorial:" in tag.text).find_all("strong")[1].get_text(strip=True)
         dircc = " ".join([strong.get_text(strip=True) for strong in soup.find(lambda tag: tag.name == "td" and "Dirección:" in tag.text).find_all("strong")])
-        tlf = soup.find(lambda tag: tag.name == "td" and "Teléfono:" in tag.text).find_all("strong")[0].get_text(strip=True)
+        tlf = soup.find(lambda tag: tag.name == "td" and ("Teléfono:" in tag.text or "Teléfonos:" in tag.text)).find_all("strong")[0].get_text(strip=True)
         fax = soup.find(lambda tag: tag.name == "td" and "Fax:" in tag.text).find_all("strong")[1].get_text(strip=True)
         web = soup.find(lambda tag: tag.name == "td" and "Web:" in tag.text).find("a").get_text(strip=True)
         email = soup.find(lambda tag: tag.name == "td" and "Correo electrónico:" in tag.text).find_next_sibling("td").find("strong").get_text(strip=True)
