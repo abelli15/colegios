@@ -15,7 +15,7 @@ def write_csv(filename, headers, data): # Escribir sobre un archivo csv (si no e
 
 # Funciones específicas
 data_headers = ["ID", "DONE"]
-results_headers = ["code", "name", "tipo", "titularidad", "titular", "mncp", "dircc", "tlf", "fax", "web", "email", "jornada"]
+results_headers = ["code", "name", "tipo", "titularidad", "titular", "territorio", "dircc", "tlf", "fax", "web", "email", "jornada", "mncp", "etps_educ", "dist_coche", "dist_trns_pub", "dist_andnd"]
 def create_result_file(filename): # Crear el archivo de salida donde se van a guardar los resultados
     if Path(filename).is_file():
         results = read_csv(filename)
