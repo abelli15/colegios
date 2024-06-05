@@ -2,6 +2,7 @@
 import os
 from py_csv import read_csv, create_result_file, update_result_file, update_data_file
 from py_chrome import open_browser, navigate_to_page, get_data, close_browser, get_maps_info
+from py_re import format_time
 
 # 0) Variables globales
 data_filename = os.path.join("files", "csv_codes_list.csv")
@@ -41,7 +42,10 @@ for item in data:
                     "etps_educ": "",
                     "dist_coche": "",
                     "dist_trns_pub": "",
-                    "dist_andnd": ""
+                    "dist_andnd": "",
+                    "dist_coche_min": "",
+                    "dist_trns_pub_min": "",
+                    "dist_andnd_min": ""
                 }
         navigate_to_page(driver, url_query)
         result["mncp"], result["etps_educ"], result["name"], result["tipo"], result["titularidad"], result["titular"], result["territorio"], result["dircc"], result["tlf"], result["fax"], result["web"], result["email"], result["jornada"] = get_data(driver, code)
@@ -52,8 +56,14 @@ for item in data:
     if result["dircc"] is not "" and (result["dist_coche"] is "" or result["dist_trns_pub"] is "" or result["dist_andnd"] is ""):
         result["dist_coche"], result["dist_trns_pub"], result["dist_andnd"] = get_maps_info(driver, result["dircc"])
         update_result_file(results_filename, results)
+    # Si no tiene la distancia normalizada, pasarla a formato normalizado
+    if (result["dist_coche"] is not "" and result["dist_coche_min"] is "") or (result["dist_trns_pub"] is not "" and result["dist_trns_pub_min"] is "") or (result["dist_andnd"] is not "" and result["dist_andnd_min"] is ""):
+        result["dist_coche_min"] = format_time(result["dist_coche"])
+        result["dist_trns_pub_min"] = format_time(result["dist_trns_pub"])
+        result["dist_andnd_min"] = format_time(result["dist_andnd"])
+        update_result_file(results_filename, results)
     index += 1
-    if index % 50 == 0:
+    if index % 10000 == 0:
         close_browser(driver)
         driver = open_browser()
 
